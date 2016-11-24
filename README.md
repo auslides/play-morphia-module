@@ -1,5 +1,5 @@
 # play-morphia-module
-A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.5.x/Home) 2.5/244
+A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.5.x/Home) 2.5
 
 # Publish it
 
