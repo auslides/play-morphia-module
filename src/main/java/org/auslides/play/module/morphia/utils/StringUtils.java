@@ -1,17 +1,6 @@
 package org.auslides.play.module.morphia.utils;
 
-/**
- * User: leodagdag
- * Date: 03/10/12
- * Time: 12:54
- */
 public class StringUtils {
-    /**
-     * Re-implementation of org.apache.commons.lang.StringUtils.isBlank() to remove dependency
-     *
-     * @param str
-     * @return
-     */
     public static boolean isBlank(String str) {
         int strLen;
         if (str == null || (strLen = str.length()) == 0) {
