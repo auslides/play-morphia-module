@@ -1,7 +1,5 @@
-# play2-morphia-plugin [![Build Status](https://secure.travis-ci.org/leodagdag/play2-morphia-plugin.png)](http://travis-ci.org/leodagdag/play2-morphia-plugin)
-Plug-in to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.4.x/Home) 2.4
-
-_inpired by [greenlaw110 / play-morphia](https://github.com/greenlaw110/play-morphia)_
+# play-morphia-module
+A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.5.x/Home) 2.5/244
 
 # Publish it
 
@@ -15,7 +13,7 @@ to publish it to the local repository, so that you could reference it in your pl
 
 Add the following to your build's library dependency:
 ``````
-"leodagdag"  %% "play2-morphia-plugin"  % "0.2.5.0"
+"org.auslides"  %% "play-morphia-module"  % "2.5.10"
 ``````
 
 ### Configuring the connection in conf/application.conf
@@ -56,7 +54,7 @@ then injected it by:
 IMorphia Interface:
 ``````
 public interface IMorphia {
-    public Morphia morphia();
+    public Morphia underlying();
     public Datastore ds(String dbName);
     public Datastore ds();
     public DB db();
@@ -82,11 +80,13 @@ Then binding this implementation to IPasswordDecryptor in your module:
    bind(IPasswordDecryptor.class).to(MyPasswordDecryptor.class)
 ``````
 
-see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.4.x/JavaDependencyInjection).
+see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.5.x/JavaDependencyInjection).
 
 In application.conf, you should disable the default password decryptor module:
 ``````
-   play.modules.disabled += "leodagdag.play2morphia.PasswordDecryptorModule"
+   play.modules.disabled += "org.auslides.play.module.morphia.PasswordDecryptorModule"
 ``````
 
-see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.4.x/JavaDependencyInjection).
+see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.5.x/JavaDependencyInjection).
+
+_inpired by [leodagdag/play2-morphia-plugin](https://github.com/leodagdag/play2-morphia-plugin)_
