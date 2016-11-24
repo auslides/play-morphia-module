@@ -37,7 +37,7 @@ morphia.db.password=<password>
 
 ### Dependency Injection 
 
-Play 2.5 supports [Dependency Injection](https://www.playframework.com/documentation/2.55.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
+Play 2.5 supports [Dependency Injection](https://www.playframework.com/documentation/2.5.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
 ``````
   @Inject IMorphia morphia ;
 ``````
