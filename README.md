@@ -53,6 +53,8 @@ Play 2.5 supports [Dependency Injection](https://www.playframework.com/documenta
 ``````
 in your component. This will use the configuration prefixed with 'morphia' in the application.conf. You could also use your own prefix name, for example:
 ``````
+play.modules.morphia.prefixes=[mymorphia,yourmorphia]
+......
 mymorphia.db.host="127.0.0.1"
 .....
 ``````

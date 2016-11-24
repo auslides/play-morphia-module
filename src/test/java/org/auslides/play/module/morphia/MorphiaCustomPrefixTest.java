@@ -14,35 +14,35 @@ import org.mongodb.morphia.query.UpdateOperations;
 import org.mongodb.morphia.query.UpdateResults;
 import play.Application;
 import play.Environment;
-import play.Mode;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.inject.guice.GuiceApplicationLoader;
 import play.test.Helpers;
 
 import javax.inject.Inject;
-import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by zhanggf on 2016/11/24.
  */
-public class MorphiaTest {
+public class MorphiaCustomPrefixTest {
     @Inject
     Application application;
 
-    @Inject
+    @Inject @ConfigPrefix("mymorphia")
     IMorphia morphia ;
 
     @Before
     public void setup() {
         Map<String, Object> configs = new HashMap<>() ;
-        configs.put("morphia.db.seeds", "127.0.0.1:27017") ;
-        configs.put("morphia.db.name", "test_db") ;
+        configs.put("mymorphia.db.seeds", "127.0.0.1:27017") ;
+        configs.put("mymorphia.db.name", "test_db") ;
+        configs.put("play.modules.morphia.prefixes", Arrays.asList("mymorphia")) ;
         //configs.put("morphia.db.name", "") ;
         //configs.put("morphia.db.name", "") ;
-        configs.put("morphia.scan.classes", "org.auslides.play.module.morphia.models.Post") ;
-        configs.put("morphia.scan.packages", "org.auslides.play.module.morphia.scanning") ;
+        configs.put("mymorphia.scan.classes", "org.auslides.play.module.morphia.models.Post") ;
+        configs.put("mymorphia.scan.packages", "org.auslides.play.module.morphia.scanning") ;
         GuiceApplicationBuilder builder = new GuiceApplicationLoader()
                 .builder(new GuiceApplicationLoader.Context(Environment.simple(), configs)) ;
         Guice.createInjector(builder.applicationModule()).injectMembers(this);
