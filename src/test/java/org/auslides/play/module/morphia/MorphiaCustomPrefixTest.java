@@ -41,8 +41,8 @@ public class MorphiaCustomPrefixTest {
         configs.put("play.modules.morphia.prefixes", Arrays.asList("mymorphia")) ;
         //configs.put("morphia.db.name", "") ;
         //configs.put("morphia.db.name", "") ;
-        configs.put("mymorphia.scan.classes", "org.auslides.play.module.morphia.models.Post") ;
-        configs.put("mymorphia.scan.packages", "org.auslides.play.module.morphia.scanning") ;
+        configs.put("mymorphia.scan.classes", Arrays.asList("org.auslides.play.module.morphia.models.Post")) ;
+        configs.put("mymorphia.scan.packages", Arrays.asList("org.auslides.play.module.morphia.scanning")) ;
         GuiceApplicationBuilder builder = new GuiceApplicationLoader()
                 .builder(new GuiceApplicationLoader.Context(Environment.simple(), configs)) ;
         Guice.createInjector(builder.applicationModule()).injectMembers(this);

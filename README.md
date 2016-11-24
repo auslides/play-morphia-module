@@ -38,11 +38,11 @@ morphia.db.password=<password>
 ### Configuring the entity classes in conf/application.conf
 
 ````
-morphia.scan.packages=<a comma separated list of fully qualified package names>
+morphia.scan.packages=[com.package1,com.pakage2]
 ````
 and/or
 ````
-morphia.scan.classes=<a comma separated list of fully qualified class names>
+morphia.scan.classes=[com.my.Class1,com.my.Class2]
 ````
 
 ### Dependency Injection 

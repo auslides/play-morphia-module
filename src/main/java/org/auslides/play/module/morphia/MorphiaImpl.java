@@ -187,8 +187,9 @@ public class MorphiaImpl implements IMorphia {
             }
             gridfs = new GridFS(ds.getDB(), uploadCollection);
             MorphiaLogger.debug("GridFS created", "");
-            MorphiaLogger.debug("Classes mapping...", "");
-            mapClasses(morphiaConf.getString(ConfigKey.SCANNER_PACKAGES.getKey()), morphiaConf.getString(ConfigKey.SCANNER_CLASSES.getKey()));
+            List<String> pkgList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_PACKAGES.getKey()) ;
+            List<String> clsList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_CLASSES.getKey()) ;
+            mapClasses(pkgList, clsList);
             MorphiaLogger.debug("End of initializing Morphia", "");
         } catch (MongoException e) {
             MorphiaLogger.error(e, "Problem connecting MongoDB");
@@ -202,7 +203,7 @@ public class MorphiaImpl implements IMorphia {
         }
     }
 
-    private void mapClasses(String packages, String classes) throws ClassNotFoundException {
+    private void mapClasses(List<String> packages, List<String> classes) throws ClassNotFoundException {
         // Register all entity classes
         scanPackages(packages);
         scanClasses(classes);
@@ -211,17 +212,22 @@ public class MorphiaImpl implements IMorphia {
         ds.ensureIndexes(); //creates indexes from @Index annotations in your entities
     }
 
-    private void scanPackages(String packages) {
-        final List<String> listPackages = Arrays.asList(packages.split(",")) ;
-        new EntityScanner(morphia, (s) ->listPackages.stream().anyMatch((p)->s.startsWith(p)));
+    private void scanPackages(List<String> packages) {
+        if (packages == null || packages.isEmpty())
+            return ;
+
+        for (String pkg : packages ) {
+            MorphiaLogger.debug("Mapping classes in ...", pkg);
+        }
+        new EntityScanner(morphia, (s) ->packages.stream().anyMatch((p)->s.startsWith(p)));
     }
 
-    private void scanClasses(String classes) {
+    private void scanClasses(List<String> classes) {
         if ( classes == null || classes.isEmpty())
             return ;
-        String[] arrClasses = classes.split(",") ;
         final List<String> listClasses = new ArrayList<>() ;
-        for (String cls : arrClasses) {
+        for (String cls : classes) {
+            MorphiaLogger.debug("Mapping classes...", cls);
             listClasses.add(cls + ".class");
         }
 

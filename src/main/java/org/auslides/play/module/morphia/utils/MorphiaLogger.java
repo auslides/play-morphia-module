@@ -22,11 +22,10 @@ public class MorphiaLogger {
             if (morphiaConf != null) {
                 debug("Config by morphiaConf");
                 for (String key : morphiaConf.keys()) {
-                    debug("%s=%s", key, morphiaConf.getString(key));
-                }
-                debug("Config by ConfigKey");
-                for (ConfigKey key : ConfigKey.values()) {
-                    debug("%s=%s", key, morphiaConf.getString(key.getKey()));
+                    if ( key.contains("scan") || key.contains("morphia.prefixes"))
+                        debug("%s=%s", key, morphiaConf.getStringList(key));
+                    else
+                        debug("%s=%s", key, morphiaConf.getString(key));
                 }
             }
         }

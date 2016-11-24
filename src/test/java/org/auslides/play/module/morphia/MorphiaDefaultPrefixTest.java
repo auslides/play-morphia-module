@@ -21,6 +21,7 @@ import play.test.Helpers;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +42,8 @@ public class MorphiaDefaultPrefixTest {
         configs.put("morphia.db.name", "test_db") ;
         //configs.put("morphia.db.name", "") ;
         //configs.put("morphia.db.name", "") ;
-        configs.put("morphia.scan.classes", "org.auslides.play.module.morphia.models.Post") ;
-        configs.put("morphia.scan.packages", "org.auslides.play.module.morphia.scanning") ;
+        configs.put("morphia.scan.classes", Arrays.asList("org.auslides.play.module.morphia.models.Post")) ;
+        configs.put("morphia.scan.packages", Arrays.asList("org.auslides.play.module.morphia.scanning")) ;
         GuiceApplicationBuilder builder = new GuiceApplicationLoader()
                 .builder(new GuiceApplicationLoader.Context(Environment.simple(), configs)) ;
         Guice.createInjector(builder.applicationModule()).injectMembers(this);

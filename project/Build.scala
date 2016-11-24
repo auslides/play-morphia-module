@@ -21,9 +21,9 @@ object PlayMorphiaModuleBuild extends Build {
 	
     publishTo := {
         if (version.value.trim.endsWith("SNAPSHOT"))
-	     Some(Resolver.file("file",  new File("C:\\mvn-repo\\snapshots")))
+	     Some(Resolver.file("file",  new File("/var/repository/maven/snapshots")))
        else
-	     Some(Resolver.file("file",  new File("C:\\mvn-repo\\releases")))
+	     Some(Resolver.file("file",  new File("/var/repository/maven/releases")))
     },
 
 	  
