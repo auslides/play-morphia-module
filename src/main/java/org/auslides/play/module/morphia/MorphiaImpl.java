@@ -187,29 +187,26 @@ public class MorphiaImpl implements IMorphia {
             }
             gridfs = new GridFS(ds.getDB(), uploadCollection);
             MorphiaLogger.debug("GridFS created", "");
-            List<String> pkgList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_PACKAGES.getKey()) ;
-            List<String> clsList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_CLASSES.getKey()) ;
-            mapClasses(pkgList, clsList);
+            if ( morphiaConf.underlying().hasPath(ConfigKey.SCANNER_PACKAGES.getKey())) {
+                List<String> pkgList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_PACKAGES.getKey());
+                scanPackages(pkgList);
+            }
+            if ( morphiaConf.underlying().hasPath(ConfigKey.SCANNER_CLASSES.getKey())) {
+                List<String> clsList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_CLASSES.getKey());
+                scanClasses(clsList);
+            }
+
+            ds.ensureCaps(); //creates capped collections from @Entity
+            ds.ensureIndexes(); //creates indexes from @Index annotations in your entities
+
             MorphiaLogger.debug("End of initializing Morphia", "");
         } catch (MongoException e) {
             MorphiaLogger.error(e, "Problem connecting MongoDB");
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            MorphiaLogger.error(e, "Problem mapping class");
             throw new RuntimeException(e);
         } catch (UnknownHostException e) {
             MorphiaLogger.error(e, "Problem connecting MongoDB");
             throw new RuntimeException(e);
         }
-    }
-
-    private void mapClasses(List<String> packages, List<String> classes) throws ClassNotFoundException {
-        // Register all entity classes
-        scanPackages(packages);
-        scanClasses(classes);
-
-        ds.ensureCaps(); //creates capped collections from @Entity
-        ds.ensureIndexes(); //creates indexes from @Index annotations in your entities
     }
 
     private void scanPackages(List<String> packages) {
