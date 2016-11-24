@@ -1,17 +1,14 @@
 # play-morphia-module
 A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.5.x/Home) 2.5
 
-# Publish it
 
-Using
+## Usage
+
+Add the repository:
 ````
-sbt publishLocal
+resolvers += "auslides repo" at "https://github.com/auslides/repository/raw/master/maven/releases"
 ````
-to publish it to the local repository, so that you could reference it in your play application
-
-# Configuration
-
-Add the following to your build's library dependency:
+and add the following build dependency:
 ``````
 "org.auslides"  %% "play-morphia-module"  % "2.5.10"
 ``````
