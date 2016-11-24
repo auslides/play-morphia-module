@@ -35,6 +35,16 @@ morphia.db.username=<username>
 morphia.db.password=<password>
 ``````
 
+### Configuring the entity classes in conf/application.conf
+
+````
+morphia.scan.packages=<a comma separated list of fully qualified package names>
+````
+and/or
+````
+morphia.scan.classes=<a comma separated list of fully qualified class names>
+````
+
 ### Dependency Injection 
 
 Play 2.5 supports [Dependency Injection](https://www.playframework.com/documentation/2.5.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
