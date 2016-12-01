@@ -41,10 +41,10 @@ object PlayMorphiaModuleBuild extends Build {
   object Dependencies {
     val runtime = Seq(
       javaWs,
-      "org.mongodb.morphia" % "morphia" % "1.3.0-rc0",
-      "org.mongodb.morphia" % "morphia-validation" % "1.3.0-rc0",
-      "org.mongodb.morphia" % "morphia-logging-slf4j" % "1.3.0-rc0",
-	    "org.mongodb.morphia" % "morphia-entityscanner-plug" % "1.3.0-rc0",
+      "org.mongodb.morphia" % "morphia" % "1.3.0",
+      "org.mongodb.morphia" % "morphia-validation" % "1.3.0",
+      "org.mongodb.morphia" % "morphia-logging-slf4j" % "1.3.0",
+	    "org.mongodb.morphia" % "morphia-entityscanner-plug" % "1.3.0",
       "com.blogspot.mydailyjava" % "weak-lock-free" % "0.11"
     )
 	
