@@ -47,6 +47,7 @@ public class MorphiaImpl implements IMorphia {
         this.configuration = configuration ;
         this.environment = environment ;
         this.passwordDecryptor = passwordDecryptor ;
+		//void addStopHook(Callable<? extends CompletionStage<?>> hook);
         lifecycle.addStopHook(() -> {
             stop();
             return F.Promise.pure(null);
