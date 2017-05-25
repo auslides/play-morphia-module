@@ -10,6 +10,12 @@ object PlayMorphiaModuleBuild extends Build {
   import Dependencies._
   import BuildSettings._
 
+  val versionOfScala = "2.12.2"
+  
+  val morphiaVersion = "1.3.2"
+  
+  val playVersion = "2.6.0-RC1"
+  
   lazy val playMorphiaModdule = Project("play-morphia-module", file(".")).enablePlugins(PlayJava).settings(buildSettings).settings(
     libraryDependencies ++= runtime ++ test,
 
@@ -41,10 +47,10 @@ object PlayMorphiaModuleBuild extends Build {
   object Dependencies {
     val runtime = Seq(
       javaWs,
-      "org.mongodb.morphia" % "morphia" % "1.3.2",
-      "org.mongodb.morphia" % "morphia-validation" % "1.3.2",
-      "org.mongodb.morphia" % "morphia-logging-slf4j" % "1.3.2",
-	  "org.mongodb.morphia" % "morphia-entityscanner-plug" % "1.3.2",
+      "org.mongodb.morphia" % "morphia" % morphiaVersion,
+      "org.mongodb.morphia" % "morphia-validation" % morphiaVersion,
+      "org.mongodb.morphia" % "morphia-logging-slf4j" % morphiaVersion,
+	  "org.mongodb.morphia" % "morphia-entityscanner-plug" % morphiaVersion,
       "com.blogspot.mydailyjava" % "weak-lock-free" % "0.12"
     )
 	
@@ -56,9 +62,9 @@ object PlayMorphiaModuleBuild extends Build {
 
   object BuildSettings {
     val buildOrganization = "org.auslides"
-    val buildVersion = "2.6.0-M5"
-    val buildScalaVersion = "2.12.2"
-    val crossBuildVersions = Seq("2.12.2")
+    val buildVersion = playVersion
+    val buildScalaVersion = versionOfScala
+    val crossBuildVersions = Seq(versionOfScala)
     val buildSettings = Defaults.defaultSettings ++ Seq(
       organization := buildOrganization,
       version := buildVersion,
