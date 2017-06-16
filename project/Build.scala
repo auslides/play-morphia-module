@@ -10,11 +10,11 @@ object PlayMorphiaModuleBuild extends Build {
   import Dependencies._
   import BuildSettings._
 
-  val versionOfScala = "2.12.2"
+  val versionOfScala = "2.11.8"
   
   val morphiaVersion = "1.3.2"
   
-  val playVersion = "2.6.0-RC1"
+  val playVersion = "2.5.14"
   
   lazy val playMorphiaModdule = Project("play-morphia-module", file(".")).enablePlugins(PlayJava).settings(buildSettings).settings(
     libraryDependencies ++= runtime ++ test,

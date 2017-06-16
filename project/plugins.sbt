@@ -1,6 +1,6 @@
 logLevel := Level.Warn
 
-val playVersion = "2.6.0-RC1"
+val playVersion = "2.5.14"
 
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % playVersion)
