@@ -13,10 +13,10 @@ import org.mongodb.morphia.ValidationExtension;
 import org.mongodb.morphia.ext.entityscanner.EntityScanner;
 import play.*;
 import play.inject.ApplicationLifecycle;
-import play.libs.F;
 
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by guofeng on 2015/5/28.
@@ -50,7 +50,7 @@ public class MorphiaImpl implements IMorphia {
 		//void addStopHook(Callable<? extends CompletionStage<?>> hook);
         lifecycle.addStopHook(() -> {
             stop();
-            return F.Promise.pure(null);
+            return CompletableFuture.completedFuture(null);
         });
 
         init() ;
