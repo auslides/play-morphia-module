@@ -50,7 +50,10 @@ object PlayMorphiaModuleBuild extends Build {
       "org.mongodb.morphia" % "morphia" % morphiaVersion,
       "org.mongodb.morphia" % "morphia-validation" % morphiaVersion,
       "org.mongodb.morphia" % "morphia-logging-slf4j" % morphiaVersion,
-	  "org.mongodb.morphia" % "morphia-entityscanner-plug" % morphiaVersion,
+	    "org.mongodb.morphia" % "morphia-entityscanner-plug" % morphiaVersion,
+      //"javax.validation" % "validation-api" % "1.1.0.Final", // required by morphia-validation
+      "javax.el" % "javax.el-api" % "2.2.5", // required by morphia-validation
+      "org.glassfish.web" % "javax.el" % "2.2.5", // required by morphia-validation
       "com.blogspot.mydailyjava" % "weak-lock-free" % "0.12"
     )
 	
