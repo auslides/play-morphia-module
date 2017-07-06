@@ -44,7 +44,7 @@ morphia.scan.classes=[com.my.Class1,com.my.Class2]
 
 ### Dependency Injection 
 
-Play 2.5 supports [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
+Play now supports [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
 ``````
   @Inject IMorphia morphia ;
 ``````
@@ -89,11 +89,11 @@ Then binding this implementation to IPasswordDecryptor in your module:
    bind(IPasswordDecryptor.class).to(MyPasswordDecryptor.class)
 ``````
 
-see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection).
+see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection#providing-custom-bindings).
 
 In application.conf, you should disable the default password decryptor module:
 ``````
    play.modules.disabled += "org.auslides.play.module.morphia.PasswordDecryptorModule"
 ``````
 
-see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection).
+see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection#excluding-modules).
