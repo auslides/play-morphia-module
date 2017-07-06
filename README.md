@@ -97,5 +97,3 @@ In application.conf, you should disable the default password decryptor module:
 ``````
 
 see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.5.x/JavaDependencyInjection).
-
-_inpired by [leodagdag/play2-morphia-plugin](https://github.com/leodagdag/play2-morphia-plugin)_
