@@ -1,5 +1,5 @@
 # play-morphia-module
-A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.5.x/Home) 2.5
+A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.6.x/Home) 2.6
 
 
 ## Usage
@@ -10,7 +10,7 @@ resolvers += "auslides repo" at "https://github.com/auslides/repository/raw/mast
 ````
 and add the following build dependency:
 ``````
-"org.auslides"  %% "play-morphia-module"  % "2.5.10"
+"org.auslides"  %% "play-morphia-module"  % "2.6.0"
 ``````
 
 ### Configuring the connection in conf/application.conf
