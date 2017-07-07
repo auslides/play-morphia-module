@@ -14,7 +14,7 @@ object PlayMorphiaModuleBuild extends Build {
   
   val morphiaVersion = "1.3.2"
   
-  val playVersion = "2.6.0"
+  val playVersion = "2.6.1"
   
   lazy val playMorphiaModdule = Project("play-morphia-module", file(".")).enablePlugins(PlayJava).settings(buildSettings).settings(
     libraryDependencies ++= runtime ++ test,
