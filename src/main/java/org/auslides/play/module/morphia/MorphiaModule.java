@@ -15,7 +15,7 @@ import scala.collection.Seq;
 
 import java.util.List;
 
-public class MorphiaModule extends Module {
+public class MorphiaModule extends play.api.inject.Module {
 
     @Override
     public Seq<Binding<?>> bindings(Environment environment, Configuration configuration) {
