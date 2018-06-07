@@ -6,8 +6,8 @@
   }
   
   object Constants {
-    val playVersion = "2.6.13"
-    val versionOfScala = "2.12.4"
+    val playVersion = "2.6.15"
+    val versionOfScala = "2.12.6"
     val morphiaVersion = "1.3.2"
   }
   
