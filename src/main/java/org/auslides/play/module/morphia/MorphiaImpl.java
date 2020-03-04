@@ -3,14 +3,12 @@ package org.auslides.play.module.morphia;
 import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
 import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import org.auslides.play.module.morphia.utils.ConfigKey;
 import org.auslides.play.module.morphia.utils.MorphiaLogger;
 import org.auslides.play.module.morphia.utils.PlayCreator;
 import org.auslides.play.module.morphia.utils.StringUtils;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.ValidationExtension;
-import org.mongodb.morphia.ext.entityscanner.EntityScanner;
 import play.*;
 import play.inject.ApplicationLifecycle;
 

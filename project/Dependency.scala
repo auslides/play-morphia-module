@@ -2,26 +2,27 @@
   import Keys._
   
   object Resolvers {
-    val typesafeRepository = "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+    val typesafeRepository = "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
   }
   
   object Constants {
-    val playVersion = "2.6.15"
-    val versionOfScala = "2.12.6"
-    val morphiaVersion = "1.3.2"
+    val playVersion = "2.8.1"
+    val versionOfScala = "2.13.1"
+    val morphiaVersion = "1.5.8"
   }
   
   object Dependencies {  
     val runtime = Seq(
-      "com.typesafe.play" % "play-java_2.12" % Constants.playVersion,
-      "org.mongodb.morphia" % "morphia" % Constants.morphiaVersion,
-      "org.mongodb.morphia" % "morphia-validation" % Constants.morphiaVersion,
-      "org.mongodb.morphia" % "morphia-logging-slf4j" % Constants.morphiaVersion,
-      "org.mongodb.morphia" % "morphia-entityscanner-plug" % Constants.morphiaVersion,
+      "com.typesafe.play" % "play-java_2.13" % Constants.playVersion,
+      "dev.morphia.morphia" % "core" % Constants.morphiaVersion,
+      "dev.morphia.morphia" % "validation" % Constants.morphiaVersion,
+      "dev.morphia.morphia" % "logging-slf4j" % Constants.morphiaVersion,
+      "dev.morphia.morphia" % "entityscanner-plug" % Constants.morphiaVersion,
+      "dev.morphia.morphia" % "guice-plug" % Constants.morphiaVersion,
       //"javax.validation" % "validation-api" % "1.1.0.Final", // required by morphia-validation
-      "javax.el" % "javax.el-api" % "2.2.5", // required by morphia-validation
-      "org.glassfish.web" % "javax.el" % "2.2.5", // required by morphia-validation
-      "com.blogspot.mydailyjava" % "weak-lock-free" % "0.12"
+      //"javax.el" % "javax.el-api" % "2.2.5", // required by morphia-validation
+      //"org.glassfish.web" % "javax.el" % "2.2.5", // required by morphia-validation
+      "com.blogspot.mydailyjava" % "weak-lock-free" % "0.15"
     )
 	
     val test = Seq(
