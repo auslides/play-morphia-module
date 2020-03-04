@@ -1,7 +1,10 @@
 package org.auslides.play.module.morphia.utils;
 
-import play.Configuration;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigValue;
 import play.Logger;
+
+import java.util.Map;
 
 public class MorphiaLogger {
 
@@ -17,15 +20,15 @@ public class MorphiaLogger {
         return Logger.isErrorEnabled();
     }
 
-    public static void debug(Configuration morphiaConf) {
+    public static void debug(Config morphiaConf) {
         if (isDebugEnabled()) {
             if (morphiaConf != null) {
                 debug("Config by morphiaConf");
-                for (String key : morphiaConf.keys()) {
-                    if ( key.contains("scan") || key.contains("morphia.prefixes"))
-                        debug("%s=%s", key, morphiaConf.getStringList(key));
+                for (Map.Entry<String, ConfigValue> entry : morphiaConf.entrySet()) {
+                    if ( entry.getKey().contains("scan") || entry.getKey().contains("morphia.prefixes"))
+                        debug("%s=%s", entry.getKey(), morphiaConf.getStringList(entry.getKey()));
                     else
-                        debug("%s=%s", key, morphiaConf.getString(key));
+                        debug("%s=%s", entry.getKey(), morphiaConf.getString(entry.getKey()));
                 }
             }
         }

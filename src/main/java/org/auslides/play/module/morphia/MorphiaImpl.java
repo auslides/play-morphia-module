@@ -3,6 +3,7 @@ package org.auslides.play.module.morphia;
 import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
 import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
+import com.typesafe.config.Config;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.auslides.play.module.morphia.utils.ConfigKey;
@@ -30,7 +31,7 @@ public class MorphiaImpl implements IMorphia {
     private Datastore ds = null;
     private GridFS gridfs;
 
-    private Configuration configuration ;
+    private Config configuration ;
     private Environment environment ;
 
     private final WeakConcurrentMap<String, Datastore> dataStores = new WeakConcurrentMap<String, Datastore>(false);
@@ -38,7 +39,7 @@ public class MorphiaImpl implements IMorphia {
     public MorphiaImpl(String prefixName,
                        Application application,
                        ApplicationLifecycle lifecycle,
-                       Configuration configuration, Environment environment, IPasswordDecryptor passwordDecryptor) {
+                       Config configuration, Environment environment, IPasswordDecryptor passwordDecryptor) {
         this.prefixName = prefixName ;
         this.application = application ;
         this.lifecycle = lifecycle ;
@@ -103,12 +104,12 @@ public class MorphiaImpl implements IMorphia {
         String username = null;
         String password = null;
         int connectionsPerHost = -1 ; // the defualt
-        Configuration morphiaConf = null ;
+        Config morphiaConf = null ;
 
         try {
             morphiaConf = configuration.getConfig(prefixName) ;
             if (morphiaConf == null) {
-                throw Configuration.root().reportError(prefixName, "Missing Morphia configuration", null);
+                throw new RuntimeException(prefixName + ": Missing Morphia configuration");
             }
 
             MorphiaLogger.debug(morphiaConf);
@@ -133,7 +134,7 @@ public class MorphiaImpl implements IMorphia {
             if (StringUtils.isBlank(dbName)) {
                 dbName = morphiaConf.getString(ConfigKey.DB_NAME.getKey());
                 if (StringUtils.isBlank(dbName)) {
-                    throw morphiaConf.reportError(ConfigKey.DB_NAME.getKey(), "Missing Morphia configuration", null);
+                    throw new RuntimeException(ConfigKey.DB_NAME.getKey() + ": Missing Morphia configuration");
                 }
             }
 
@@ -145,7 +146,7 @@ public class MorphiaImpl implements IMorphia {
                 password = morphiaConf.getString(ConfigKey.DB_PASSWORD.getKey());
             }
 
-            connectionsPerHost = morphiaConf.getInt(ConfigKey.CONNECTIONS_PER_HOST.getKey(), connectionsPerHost) ;
+            connectionsPerHost = morphiaConf.getInt(ConfigKey.CONNECTIONS_PER_HOST.getKey()) ;
             MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
             if ( connectionsPerHost != -1 )
                 builder.connectionsPerHost(connectionsPerHost);
@@ -186,12 +187,12 @@ public class MorphiaImpl implements IMorphia {
             }
             gridfs = new GridFS(ds.getDB(), uploadCollection);
             MorphiaLogger.debug("GridFS created", "");
-            if ( morphiaConf.underlying().hasPath(ConfigKey.SCANNER_PACKAGES.getKey())) {
-                List<String> pkgList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_PACKAGES.getKey());
+            if ( morphiaConf.hasPath(ConfigKey.SCANNER_PACKAGES.getKey())) {
+                List<String> pkgList = morphiaConf.getStringList(ConfigKey.SCANNER_PACKAGES.getKey());
                 scanPackages(pkgList);
             }
-            if ( morphiaConf.underlying().hasPath(ConfigKey.SCANNER_CLASSES.getKey())) {
-                List<String> clsList = morphiaConf.underlying().getStringList(ConfigKey.SCANNER_CLASSES.getKey());
+            if ( morphiaConf.hasPath(ConfigKey.SCANNER_CLASSES.getKey())) {
+                List<String> clsList = morphiaConf.getStringList(ConfigKey.SCANNER_CLASSES.getKey());
                 scanClasses(clsList);
             }
 
@@ -252,7 +253,7 @@ public class MorphiaImpl implements IMorphia {
             addrs.add(new ServerAddress(host, port));
         }
         if (addrs.isEmpty()) {
-            throw Configuration.root().reportError(ConfigKey.DB_SEEDS.getKey(), "Cannot connect to mongodb: no replica can be connected", null);
+            throw new RuntimeException(ConfigKey.DB_SEEDS.getKey() + ": Cannot connect to mongodb: no replica can be connected");
         }
         MongoCredential mongoCredential = getMongoCredential(dbName, username, password) ;
         return mongoCredential == null ? new MongoClient(addrs, options) : new MongoClient(addrs, Arrays.asList(mongoCredential), options) ;
@@ -263,7 +264,7 @@ public class MorphiaImpl implements IMorphia {
         String[] pa = port.split("[,\\s;]+");
         int len = ha.length;
         if (len != pa.length) {
-            throw Configuration.root().reportError(ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey(), "host and ports number does not match", null);
+            throw new RuntimeException(ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey() + ": host and ports number does not match", null);
         }
 
         List<ServerAddress> addrs = new ArrayList<ServerAddress>(ha.length);
@@ -275,9 +276,8 @@ public class MorphiaImpl implements IMorphia {
             }
         }
         if (addrs.isEmpty()) {
-            throw Configuration.root().reportError(
-                    ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey(), "Cannot connect to mongodb: no replica can be connected",
-                    null);
+            throw new RuntimeException(
+                    ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey() + ": Cannot connect to mongodb: no replica can be connected", );
         }
 
         MongoCredential mongoCredential = getMongoCredential(dbName, username, password) ;
@@ -289,7 +289,7 @@ public class MorphiaImpl implements IMorphia {
             return null ;
 
         if (StringUtils.isNotBlank(username) ^ StringUtils.isNotBlank(password)) {
-            throw Configuration.root().reportError(ConfigKey.DB_NAME.getKey(), "Missing username or password", null);
+            throw new RuntimeException(ConfigKey.DB_NAME.getKey() + ": Missing username or password");
         }
 
         String decryptedPassword = passwordDecryptor.decrypt(password) ;  // CHANGED: decrypt the password
