@@ -9,6 +9,7 @@ import dev.morphia.Morphia;
 import dev.morphia.ValidationExtension;
 import dev.morphia.ext.entityscanner.EntityScanner;
 import dev.morphia.mapping.DefaultCreator;
+import dev.morphia.mapping.MapperOptions;
 import org.auslides.play.module.morphia.utils.ConfigKey;
 import org.auslides.play.module.morphia.utils.MorphiaLogger;
 import org.auslides.play.module.morphia.utils.StringUtils;
@@ -177,7 +178,9 @@ public class MorphiaImpl implements IMorphia {
             morphia = new Morphia();
             // To prevent problem during hot-reload
             if (environment.isDev()) {
-                morphia.getMapper().getOptions().setObjectFactory( new DefaultCreator()) ;
+                MapperOptions.Builder mapperOptionsBuilder = MapperOptions.builder() ;
+                mapperOptionsBuilder.objectFactory(new DefaultCreator()) ;
+                morphia.getMapper().setOptions(mapperOptionsBuilder.build());
             }
             // Configure validator
             // http://mongodb.github.io/morphia/1.2/guides/validationExtension/
