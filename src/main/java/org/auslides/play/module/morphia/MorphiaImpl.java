@@ -6,11 +6,16 @@ import com.mongodb.gridfs.GridFS;
 import com.typesafe.config.Config;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
+import dev.morphia.ValidationExtension;
+import dev.morphia.ext.entityscanner.EntityScanner;
+import dev.morphia.mapping.DefaultCreator;
 import org.auslides.play.module.morphia.utils.ConfigKey;
 import org.auslides.play.module.morphia.utils.MorphiaLogger;
-import org.auslides.play.module.morphia.utils.PlayCreator;
 import org.auslides.play.module.morphia.utils.StringUtils;
-import play.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import play.Application;
+import play.Environment;
 import play.inject.ApplicationLifecycle;
 
 import java.net.UnknownHostException;
@@ -21,6 +26,8 @@ import java.util.concurrent.CompletableFuture;
  * Created by guofeng on 2015/5/28.
  */
 public class MorphiaImpl implements IMorphia {
+    private static final Logger logger = LoggerFactory.getLogger(MorphiaImpl.class);
+
     private Application application;
     private ApplicationLifecycle lifecycle ;
     private IPasswordDecryptor passwordDecryptor ;
@@ -114,8 +121,8 @@ public class MorphiaImpl implements IMorphia {
 
             MorphiaLogger.debug(morphiaConf);
 
-            String mongoURIstr = morphiaConf.getString(ConfigKey.DB_MONGOURI.getKey());
-            Logger.debug("mongoURIstr:" + mongoURIstr);
+            String mongoURIstr = getConfigValueByKey(morphiaConf, ConfigKey.DB_MONGOURI.getKey());
+            logger.debug("mongoURIstr:" + mongoURIstr);
 
             if(StringUtils.isNotBlank(mongoURIstr)) {
                 MongoClientURI mongoURI = new MongoClientURI(mongoURIstr);
@@ -126,13 +133,13 @@ public class MorphiaImpl implements IMorphia {
 
             String seeds = null ;
             if(environment.isDev()) {
-                seeds = morphiaConf.getString(ConfigKey.DB_DEV_SEEDS.getKey());
+                seeds = getConfigValueByKey(morphiaConf, ConfigKey.DB_DEV_SEEDS.getKey());
             } else {
-                seeds = morphiaConf.getString(ConfigKey.DB_SEEDS.getKey());
+                seeds = getConfigValueByKey(morphiaConf, ConfigKey.DB_SEEDS.getKey());
             }
 
             if (StringUtils.isBlank(dbName)) {
-                dbName = morphiaConf.getString(ConfigKey.DB_NAME.getKey());
+                dbName = getConfigValueByKey(morphiaConf, ConfigKey.DB_NAME.getKey());
                 if (StringUtils.isBlank(dbName)) {
                     throw new RuntimeException(ConfigKey.DB_NAME.getKey() + ": Missing Morphia configuration");
                 }
@@ -140,19 +147,20 @@ public class MorphiaImpl implements IMorphia {
 
             //Check if credentials parameters are present
             if (StringUtils.isBlank(username)) {
-                username = morphiaConf.getString(ConfigKey.DB_USERNAME.getKey());
+                username = getConfigValueByKey(morphiaConf, ConfigKey.DB_USERNAME.getKey());
             }
             if (StringUtils.isBlank(password)) {
-                password = morphiaConf.getString(ConfigKey.DB_PASSWORD.getKey());
+                password = getConfigValueByKey(morphiaConf, ConfigKey.DB_PASSWORD.getKey());
             }
 
-            connectionsPerHost = morphiaConf.getInt(ConfigKey.CONNECTIONS_PER_HOST.getKey()) ;
             MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
+            if (morphiaConf.hasPath(ConfigKey.CONNECTIONS_PER_HOST.getKey()))
+                connectionsPerHost = morphiaConf.getInt(ConfigKey.CONNECTIONS_PER_HOST.getKey()) ;
             if ( connectionsPerHost != -1 )
                 builder.connectionsPerHost(connectionsPerHost);
             MongoClientOptions options = builder.build();
 
-            Logger.debug("Max connections per host: " + options.getConnectionsPerHost());
+            logger.debug("Max connections per host: " + options.getConnectionsPerHost());
 
             if(StringUtils.isNotBlank(mongoURIstr)) {
                 MongoClientURI mongoURI = new MongoClientURI(mongoURIstr);
@@ -161,15 +169,15 @@ public class MorphiaImpl implements IMorphia {
                 mongo = connect(seeds, dbName, username, password, options);
             } else {
                 mongo = connect(
-                        morphiaConf.getString(ConfigKey.DB_HOST.getKey()),
-                        morphiaConf.getString(ConfigKey.DB_PORT.getKey()),
+                        getConfigValueByKey(morphiaConf, ConfigKey.DB_HOST.getKey()),
+                        getConfigValueByKey(morphiaConf, ConfigKey.DB_PORT.getKey()),
                         dbName, username, password, options);
             }
 
             morphia = new Morphia();
             // To prevent problem during hot-reload
             if (environment.isDev()) {
-                morphia.getMapper().getOptions().setObjectFactory( new PlayCreator()) ;
+                morphia.getMapper().getOptions().setObjectFactory( new DefaultCreator()) ;
             }
             // Configure validator
             // http://mongodb.github.io/morphia/1.2/guides/validationExtension/
@@ -180,7 +188,7 @@ public class MorphiaImpl implements IMorphia {
 
             MorphiaLogger.debug("Datastore [%s] created", dbName);
             // Create GridFS
-            String uploadCollection = morphiaConf.getString(ConfigKey.COLLECTION_UPLOADS.getKey());
+            String uploadCollection = getConfigValueByKey(morphiaConf, ConfigKey.COLLECTION_UPLOADS.getKey());
             if (StringUtils.isBlank(uploadCollection)) {
                 uploadCollection = "uploads";
                 MorphiaLogger.warn("Missing Morphia configuration key [%s]. Use default value instead [%s]", ConfigKey.COLLECTION_UPLOADS, "uploads");
@@ -259,6 +267,13 @@ public class MorphiaImpl implements IMorphia {
         return mongoCredential == null ? new MongoClient(addrs, options) : new MongoClient(addrs, Arrays.asList(mongoCredential), options) ;
     }
 
+    private String getConfigValueByKey(Config config, String key) {
+        if (config.hasPath(key))
+            return config.getString(key) ;
+        else
+            return "" ;
+    }
+
     private MongoClient connect(String host, String port, String dbName, String username, String password, MongoClientOptions options) {
         String[] ha = host.split("[,\\s;]+");
         String[] pa = port.split("[,\\s;]+");
@@ -277,7 +292,7 @@ public class MorphiaImpl implements IMorphia {
         }
         if (addrs.isEmpty()) {
             throw new RuntimeException(
-                    ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey() + ": Cannot connect to mongodb: no replica can be connected", );
+                    ConfigKey.DB_HOST.getKey() + "-" + ConfigKey.DB_PORT.getKey() + ": Cannot connect to mongodb: no replica can be connected" );
         }
 
         MongoCredential mongoCredential = getMongoCredential(dbName, username, password) ;

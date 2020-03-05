@@ -1,10 +1,10 @@
 package org.auslides.play.module.morphia.provider;
 
+import com.typesafe.config.Config;
 import org.auslides.play.module.morphia.IMorphia;
 import org.auslides.play.module.morphia.IPasswordDecryptor;
 import org.auslides.play.module.morphia.MorphiaImpl;
 import play.Application;
-import play.Configuration;
 import play.Environment;
 import play.Logger;
 import play.inject.ApplicationLifecycle;
@@ -28,7 +28,7 @@ public class DefaultMorphiaApi implements MorphiaApi {
     private IPasswordDecryptor passwordDecryptor ;
 
     @Inject
-    Configuration configuration ;
+    Config configuration ;
 
     @Inject
     Environment environment ;

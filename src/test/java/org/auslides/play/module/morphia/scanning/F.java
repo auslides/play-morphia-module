@@ -1,8 +1,8 @@
 package org.auslides.play.module.morphia.scanning;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 /**
  * Created by zhanggf on 2016/11/24.

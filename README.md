@@ -1,5 +1,5 @@
 # play-morphia-module
-A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.6.x/Home) 2.6
+A module to use Morphia/MongoDB with [Play! framework](https://www.playframework.com/documentation/2.8.x/Home) 2.8.x
 
 
 ## Usage
@@ -10,7 +10,7 @@ resolvers += "auslides repo" at "https://github.com/auslides/repository/raw/mast
 ````
 and add the following build dependency:
 ``````
-"org.auslides"  %% "play-morphia-module"  % "2.6.0"
+"org.auslides"  %% "play-morphia-module"  % "2.8.1"
 ``````
 
 ### Configuring the connection in conf/application.conf
@@ -44,7 +44,7 @@ morphia.scan.classes=[com.my.Class1,com.my.Class2]
 
 ### Dependency Injection 
 
-Play now supports [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
+Play now supports [Dependency Injection](https://www.playframework.com/documentation/2.8.x/JavaDependencyInjection). There is a morphia module defined. You could inject it by
 ``````
   @Inject IMorphia morphia ;
 ``````
@@ -89,11 +89,11 @@ Then binding this implementation to IPasswordDecryptor in your module:
    bind(IPasswordDecryptor.class).to(MyPasswordDecryptor.class)
 ``````
 
-see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection#providing-custom-bindings).
+see **Providing custom bindings** in [Dependency Injection](https://www.playframework.com/documentation/2.8.x/JavaDependencyInjection#providing-custom-bindings).
 
 In application.conf, you should disable the default password decryptor module:
 ``````
    play.modules.disabled += "org.auslides.play.module.morphia.PasswordDecryptorModule"
 ``````
 
-see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection#excluding-modules).
+see **Excluding modules** in [Dependency Injection](https://www.playframework.com/documentation/2.8.x/JavaDependencyInjection#excluding-modules).

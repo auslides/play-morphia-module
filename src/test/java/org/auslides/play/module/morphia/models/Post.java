@@ -1,6 +1,6 @@
 package org.auslides.play.module.morphia.models;
 
-import org.mongodb.morphia.annotations.*;
+import dev.morphia.annotations.*;
 import org.bson.types.ObjectId;
 
 @Entity

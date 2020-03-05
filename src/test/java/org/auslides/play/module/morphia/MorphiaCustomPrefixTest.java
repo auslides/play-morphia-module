@@ -2,6 +2,9 @@ package org.auslides.play.module.morphia;
 
 import com.google.inject.Guice;
 import com.mongodb.WriteResult;
+import dev.morphia.query.Query;
+import dev.morphia.query.UpdateOperations;
+import dev.morphia.query.UpdateResults;
 import org.auslides.play.module.morphia.models.Post;
 import org.auslides.play.module.morphia.scanning.E;
 import org.auslides.play.module.morphia.scanning.F;
@@ -9,14 +12,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.UpdateOperations;
-import org.mongodb.morphia.query.UpdateResults;
 import play.Application;
 import play.Environment;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.inject.guice.GuiceApplicationLoader;
-import play.test.Helpers;
+import play.test.WithApplication;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -26,12 +26,15 @@ import java.util.Map;
 /**
  * Created by zhanggf on 2016/11/24.
  */
-public class MorphiaCustomPrefixTest {
-    @Inject
-    Application application;
+public class MorphiaCustomPrefixTest extends WithApplication {
 
     @Inject @ConfigPrefix("mymorphia")
     IMorphia morphia ;
+
+    @Override
+    protected Application provideApplication() {
+        return new GuiceApplicationBuilder().build();
+    }
 
     @Before
     public void setup() {
@@ -43,11 +46,12 @@ public class MorphiaCustomPrefixTest {
         //configs.put("morphia.db.name", "") ;
         configs.put("mymorphia.scan.classes", Arrays.asList("org.auslides.play.module.morphia.models.Post")) ;
         configs.put("mymorphia.scan.packages", Arrays.asList("org.auslides.play.module.morphia.scanning")) ;
+
         GuiceApplicationBuilder builder = new GuiceApplicationLoader()
                 .builder(new GuiceApplicationLoader.Context(Environment.simple(), configs)) ;
         Guice.createInjector(builder.applicationModule()).injectMembers(this);
 
-        Helpers.start(application);
+        startPlay() ;
     }
 
     @Test
@@ -89,6 +93,6 @@ public class MorphiaCustomPrefixTest {
 
     @After
     public void teardown() {
-        Helpers.stop(application);
+        startPlay();
     }
 }
